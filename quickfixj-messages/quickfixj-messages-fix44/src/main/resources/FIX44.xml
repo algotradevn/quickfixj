@@ -1200,6 +1200,7 @@
     <field name="MoneyLaunderingStatus" required="N"/>
     <field name="RegistID" required="N"/>
     <field name="Designation" required="N"/>
+    <field name="CustomOrderTypeField" required="N"/>
   </message>
   <message name="ExecutionReport" msgtype="8" msgcat="app">
     <field name="OrderID" required="Y"/>
@@ -6809,5 +6810,7 @@
     <field number="954" name="Nested3PartySubIDType" type="INT"/>
     <field number="955" name="LegContractSettlMonth" type="MONTHYEAR"/>
     <field number="956" name="LegInterestAccrualDate" type="LOCALMKTDATE"/>
+    
+    <field number="6000" name="CustomOrderTypeField" type="STRING"/>
   </fields>
 </fix>
