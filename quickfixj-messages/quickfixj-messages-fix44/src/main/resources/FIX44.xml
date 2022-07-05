@@ -1371,6 +1371,7 @@
       <field name="MiscFeeType" required="N"/>
       <field name="MiscFeeBasis" required="N"/>
     </group>
+    <field name="InternalOrderStatus" required="N"/>
   </message>
   <message name="DontKnowTrade" msgtype="Q" msgcat="app">
     <field name="OrderID" required="Y"/>
@@ -6812,5 +6813,6 @@
     <field number="956" name="LegInterestAccrualDate" type="LOCALMKTDATE"/>
     
     <field number="6000" name="CustomOrderTypeField" type="STRING"/>
+    <field number="6001" name="InternalOrderStatus" type="CHAR"/>
   </fields>
 </fix>
