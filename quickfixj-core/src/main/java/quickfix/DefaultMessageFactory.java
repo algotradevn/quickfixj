@@ -19,159 +19,162 @@
 
 package quickfix;
 
-import quickfix.field.ApplVerID;
-import quickfix.field.MsgType;
-
-import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
-
 import static quickfix.FixVersions.BEGINSTRING_FIX40;
 import static quickfix.FixVersions.BEGINSTRING_FIX41;
 import static quickfix.FixVersions.BEGINSTRING_FIX42;
 import static quickfix.FixVersions.BEGINSTRING_FIX43;
 import static quickfix.FixVersions.BEGINSTRING_FIX44;
 import static quickfix.FixVersions.BEGINSTRING_FIXT11;
+import static quickfix.FixVersions.BEGINSTRING_HNX;
 import static quickfix.FixVersions.FIX50;
 import static quickfix.FixVersions.FIX50SP1;
 import static quickfix.FixVersions.FIX50SP2;
+
+import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
+
+import quickfix.field.ApplVerID;
+import quickfix.field.MsgType;
 
 /**
  * The default factory for creating FIX message instances.
  */
 public class DefaultMessageFactory implements MessageFactory {
-    private final Map<String, MessageFactory> messageFactories = new ConcurrentHashMap<>();
+	private final Map<String, MessageFactory> messageFactories = new ConcurrentHashMap<>();
 
-    private final ApplVerID defaultApplVerID;
+	private final ApplVerID defaultApplVerID;
 
-    /**
-     * Constructs a DefaultMessageFactory, which dynamically loads and delegates to
-     * the default version-specific message factories, if they are available at runtime.
-     * <p>
-     * Callers can set the {@link Thread#setContextClassLoader context classloader},
-     * which will be used to load the classes if {@link Class#forName Class.forName}
-     * fails to do so (e.g. in an OSGi environment).
-     * <p>
-     * Equivalent to {@link #DefaultMessageFactory(String) DefaultMessageFactory}({@link ApplVerID#FIX50 ApplVerID.FIX50}).
-     */
-    public DefaultMessageFactory() {
-        this(ApplVerID.FIX50SP2);
-    }
+	/**
+	 * Constructs a DefaultMessageFactory, which dynamically loads and delegates to
+	 * the default version-specific message factories, if they are available at runtime.
+	 * <p>
+	 * Callers can set the {@link Thread#setContextClassLoader context classloader},
+	 * which will be used to load the classes if {@link Class#forName Class.forName}
+	 * fails to do so (e.g. in an OSGi environment).
+	 * <p>
+	 * Equivalent to {@link #DefaultMessageFactory(String) DefaultMessageFactory}({@link ApplVerID#FIX50 ApplVerID.FIX50}).
+	 */
+	public DefaultMessageFactory() {
+		this(ApplVerID.FIX50SP2);
+	}
 
-    /**
-     * Constructs a DefaultMessageFactory, which dynamically loads and delegates to
-     * the default version-specific message factories, if they are available at runtime.
-     * <p>
-     * Callers can set the {@link Thread#setContextClassLoader context classloader},
-     * which will be used to load the classes if {@link Class#forName Class.forName}
-     * fails to do so (e.g. in an OSGi environment).
-     *
-     * @param defaultApplVerID ApplVerID value used by default for {@link #create(String, ApplVerID, String)}
-     */
-    public DefaultMessageFactory(String defaultApplVerID) {
-        Objects.requireNonNull(defaultApplVerID, "defaultApplVerID");
+	/**
+	 * Constructs a DefaultMessageFactory, which dynamically loads and delegates to
+	 * the default version-specific message factories, if they are available at runtime.
+	 * <p>
+	 * Callers can set the {@link Thread#setContextClassLoader context classloader},
+	 * which will be used to load the classes if {@link Class#forName Class.forName}
+	 * fails to do so (e.g. in an OSGi environment).
+	 *
+	 * @param defaultApplVerID ApplVerID value used by default for {@link #create(String, ApplVerID, String)}
+	 */
+	public DefaultMessageFactory(final String defaultApplVerID) {
+		Objects.requireNonNull(defaultApplVerID, "defaultApplVerID");
 
-        this.defaultApplVerID = new ApplVerID(defaultApplVerID);
+		this.defaultApplVerID = new ApplVerID(defaultApplVerID);
 
-        // To loosen the coupling between this factory and generated code, the
-        // message factories are discovered at run time using reflection
-        addFactory(BEGINSTRING_FIX40);
-        addFactory(BEGINSTRING_FIX41);
-        addFactory(BEGINSTRING_FIX42);
-        addFactory(BEGINSTRING_FIX43);
-        addFactory(BEGINSTRING_FIX44);
-        addFactory(BEGINSTRING_FIXT11);
-        addFactory(FIX50);
-        addFactory(FIX50SP1);
-        addFactory(FIX50SP2);
-    }
+		// To loosen the coupling between this factory and generated code, the
+		// message factories are discovered at run time using reflection
+		addFactory(BEGINSTRING_FIX40);
+		addFactory(BEGINSTRING_FIX41);
+		addFactory(BEGINSTRING_FIX42);
+		addFactory(BEGINSTRING_FIX43);
+		addFactory(BEGINSTRING_FIX44);
+		addFactory(BEGINSTRING_HNX);
+		addFactory(BEGINSTRING_FIXT11);
+		addFactory(FIX50);
+		addFactory(FIX50SP1);
+		addFactory(FIX50SP2);
+	}
 
-    private void addFactory(String beginString) {
-        String packageVersion = beginString.replace(".", "").toLowerCase();
-        try {
-            addFactory(beginString, "quickfix." + packageVersion + ".MessageFactory");
-        } catch (ClassNotFoundException e) {
-            // ignore - this factory is not available
-        }
-    }
+	private void addFactory(final String beginString) {
+		final String packageVersion = beginString.replace(".", "").toLowerCase();
+		try {
+			addFactory(beginString, "quickfix." + packageVersion + ".MessageFactory");
+		} catch (final ClassNotFoundException e) {
+			// ignore - this factory is not available
+		}
+	}
 
-    /**
-     * Adds a factory of the given class, which will be delegated to for creating
-     * Message instances from messages with the given begin string.
-     * <p>
-     * Callers can set the {@link Thread#setContextClassLoader context classloader},
-     * which will be used to load the classes if {@link Class#forName Class.forName}
-     * fails to do so (e.g. in an OSGi environment).
-     *
-     * @param beginString the begin string whose messages will be delegated to the factory
-     * @param factoryClassName the name of the factory class to instantiate and add
-     * @throws ClassNotFoundException if the named factory class cannot be found
-     * @throws RuntimeException if the named factory class cannot be instantiated
-     */
-    @SuppressWarnings("unchecked")
-    public void addFactory(String beginString, String factoryClassName) throws ClassNotFoundException {
-        // try to load the class
-        Class<? extends MessageFactory> factoryClass = null;
-        try {
-            // try using our own classloader
-            factoryClass = (Class<? extends MessageFactory>) Class.forName(factoryClassName);
-        } catch (ClassNotFoundException e) {
-                // try using context classloader (i.e. allow caller to specify it)
-            Thread.currentThread().getContextClassLoader().loadClass(factoryClassName);
-        }
-        // if factory is found, add it
-        if (factoryClass != null) {
-            addFactory(beginString, factoryClass);
-        }
-    }
+	/**
+	 * Adds a factory of the given class, which will be delegated to for creating
+	 * Message instances from messages with the given begin string.
+	 * <p>
+	 * Callers can set the {@link Thread#setContextClassLoader context classloader},
+	 * which will be used to load the classes if {@link Class#forName Class.forName}
+	 * fails to do so (e.g. in an OSGi environment).
+	 *
+	 * @param beginString the begin string whose messages will be delegated to the factory
+	 * @param factoryClassName the name of the factory class to instantiate and add
+	 * @throws ClassNotFoundException if the named factory class cannot be found
+	 * @throws RuntimeException if the named factory class cannot be instantiated
+	 */
+	@SuppressWarnings("unchecked")
+	public void addFactory(final String beginString, final String factoryClassName) throws ClassNotFoundException {
+		// try to load the class
+		Class<? extends MessageFactory> factoryClass = null;
+		try {
+			// try using our own classloader
+			factoryClass = (Class<? extends MessageFactory>) Class.forName(factoryClassName);
+		} catch (final ClassNotFoundException e) {
+			// try using context classloader (i.e. allow caller to specify it)
+			Thread.currentThread().getContextClassLoader().loadClass(factoryClassName);
+		}
+		// if factory is found, add it
+		if (factoryClass != null) {
+			addFactory(beginString, factoryClass);
+		}
+	}
 
-    /**
-     * Adds a factory of the given class, which will be delegated to for creating
-     * Message instances from messages with the given begin string.
-     *
-     * @param beginString the begin string whose messages will be delegated to the factory
-     * @param factoryClass the class of the factory to instantiate and add
-     * @throws RuntimeException if the given factory class cannot be instantiated
-     */
-    public void addFactory(String beginString, Class<? extends MessageFactory> factoryClass) {
-        try {
-            MessageFactory factory = factoryClass.newInstance();
-            messageFactories.put(beginString, factory);
-        } catch (Exception e) {
-            throw new RuntimeException("can't instantiate " + factoryClass.getName(), e);
-        }
-    }
+	/**
+	 * Adds a factory of the given class, which will be delegated to for creating
+	 * Message instances from messages with the given begin string.
+	 *
+	 * @param beginString the begin string whose messages will be delegated to the factory
+	 * @param factoryClass the class of the factory to instantiate and add
+	 * @throws RuntimeException if the given factory class cannot be instantiated
+	 */
+	public void addFactory(final String beginString, final Class<? extends MessageFactory> factoryClass) {
+		try {
+			final MessageFactory factory = factoryClass.newInstance();
+			messageFactories.put(beginString, factory);
+		} catch (final Exception e) {
+			throw new RuntimeException("can't instantiate " + factoryClass.getName(), e);
+		}
+	}
 
-    @Override
-    public Message create(String beginString, String msgType) {
-        return create(beginString, defaultApplVerID, msgType);
-    }
+	@Override
+	public Message create(final String beginString, final String msgType) {
+		return create(beginString, defaultApplVerID, msgType);
+	}
 
-    @Override
-    public Message create(String beginString, ApplVerID applVerID, String msgType) {
-        MessageFactory messageFactory = messageFactories.get(beginString);
-        if (beginString.equals(BEGINSTRING_FIXT11) && !MessageUtils.isAdminMessage(msgType)) {
-            if (applVerID == null) {
-                applVerID = new ApplVerID(defaultApplVerID.getValue());
-            }
-            messageFactory = messageFactories.get(MessageUtils.toBeginString(applVerID));
-        }
+	@Override
+	public Message create(final String beginString, ApplVerID applVerID, final String msgType) {
+		MessageFactory messageFactory = messageFactories.get(beginString);
+		if (beginString.equals(BEGINSTRING_FIXT11) && !MessageUtils.isAdminMessage(msgType)) {
+			if (applVerID == null) {
+				applVerID = new ApplVerID(defaultApplVerID.getValue());
+			}
+			messageFactory = messageFactories.get(MessageUtils.toBeginString(applVerID));
+		}
 
-        if (messageFactory != null) {
-            return messageFactory.create(beginString, applVerID, msgType);
-        }
+		if (messageFactory != null) {
+			return messageFactory.create(beginString, applVerID, msgType);
+		}
 
-        Message message = new Message();
-        message.getHeader().setString(MsgType.FIELD, msgType);
+		final Message message = new Message();
+		message.getHeader().setString(MsgType.FIELD, msgType);
 
-        return message;
-    }
+		return message;
+	}
 
-    public Group create(String beginString, String msgType, int correspondingFieldID) {
-        MessageFactory messageFactory = messageFactories.get(beginString);
-        if (messageFactory != null) {
-            return messageFactory.create(beginString, msgType, correspondingFieldID);
-        }
-        throw new IllegalArgumentException("Unsupported FIX version: " + beginString);
-    }
+	@Override
+	public Group create(final String beginString, final String msgType, final int correspondingFieldID) {
+		final MessageFactory messageFactory = messageFactories.get(beginString);
+		if (messageFactory != null) {
+			return messageFactory.create(beginString, msgType, correspondingFieldID);
+		}
+		throw new IllegalArgumentException("Unsupported FIX version: " + beginString);
+	}
 }
