@@ -1201,7 +1201,7 @@
     <field name="RegistID" required="N"/>
     <field name="Designation" required="N"/>
     <field name="CustomOrderTypeField" required="N"/>
-    <field name="ThirdPartySource" required="N"/>
+    <field name="ThirdPartyBroker" required="N"/>
   </message>
   <message name="ExecutionReport" msgtype="8" msgcat="app">
     <field name="OrderID" required="Y"/>
@@ -6808,6 +6808,6 @@
     
     <field number="6000" name="CustomOrderTypeField" type="STRING"/>
     <field number="6001" name="InternalOrderStatus" type="CHAR"/>
-    <field number="6002" name="ThirdPartySource" type="STRING"/>
+    <field number="6002" name="ThirdPartyBroker" type="STRING"/>
   </fields>
 </fix>
