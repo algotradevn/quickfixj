@@ -1375,6 +1375,10 @@
       <field name="MiscFeeBasis" required="N"/>
     </group>
     <field name="InternalOrderStatus" required="N"/>
+    <field name="ThirdPartySource" required="N"/>
+    <field name="SecurityExchange" required="N"/>
+    <field name="Price" required="N"/>
+    <field name="OrdType" required="N"/>
   </message>
   <message name="DontKnowTrade" msgtype="Q" msgcat="app">
     <field name="OrderID" required="Y"/>
