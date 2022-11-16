@@ -195,16 +195,14 @@ public class Message extends FieldMap {
     private static final String BODY_LENGTH_FIELD = SOH + String.valueOf(BodyLength.FIELD) + '=';
     private static final String CHECKSUM_FIELD = SOH + String.valueOf(CheckSum.FIELD) + '=';
 
-	private static void setBodyLength(final StringBuilder stringBuilder) {
-		int bodyLengthIndex = stringBuilder.indexOf(BODY_LENGTH_FIELD, 0);
-		final int sohIndex = stringBuilder.indexOf(SOH, bodyLengthIndex + 1);
-		final int checkSumIndex = stringBuilder.lastIndexOf(CHECKSUM_FIELD);
-		final int length = checkSumIndex > -1 ? checkSumIndex - sohIndex
-				: stringBuilder.length() - sohIndex;
-		bodyLengthIndex += BODY_LENGTH_FIELD.length();
-		// 7 = |10=xxx
-		stringBuilder.replace(bodyLengthIndex, bodyLengthIndex + 3, NumbersCache.get(length + 7));
-	}
+    private static void setBodyLength(StringBuilder stringBuilder) {
+        int bodyLengthIndex = stringBuilder.indexOf(BODY_LENGTH_FIELD, 0);
+        int sohIndex = stringBuilder.indexOf(SOH, bodyLengthIndex + 1);
+        int checkSumIndex = stringBuilder.lastIndexOf(CHECKSUM_FIELD);
+        int length = checkSumIndex - sohIndex;
+        bodyLengthIndex += BODY_LENGTH_FIELD.length();
+        stringBuilder.replace(bodyLengthIndex, bodyLengthIndex + 3, NumbersCache.get(length));
+    }
 
     private static void setChecksum(StringBuilder stringBuilder) {
         int checkSumIndex = stringBuilder.lastIndexOf(CHECKSUM_FIELD);
