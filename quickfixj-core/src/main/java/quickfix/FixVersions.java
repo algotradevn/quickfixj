@@ -23,24 +23,26 @@ package quickfix;
  * Constants containing the BeginString field values for various FIX versions.
  */
 public interface FixVersions {
-    String BEGINSTRING_FIX40 = "FIX.4.0";
-    String BEGINSTRING_FIX41 = "FIX.4.1";
-    String BEGINSTRING_FIX42 = "FIX.4.2";
-    String BEGINSTRING_FIX43 = "FIX.4.3";
-    String BEGINSTRING_FIX44 = "FIX.4.4";
+	String BEGINSTRING_FIX40 = "FIX.4.0";
+	String BEGINSTRING_FIX41 = "FIX.4.1";
+	String BEGINSTRING_FIX42 = "FIX.4.2";
+	String BEGINSTRING_FIX43 = "FIX.4.3";
+	String BEGINSTRING_FIX44 = "FIX.4.4";
 
-    /*
-     * FIX 5.0+ does not have a begin string.
-     */
-    String FIX50 = "FIX.5.0";
-    String FIX50SP1 = "FIX.5.0SP1";
-    String FIX50SP2 = "FIX.5.0SP2";
-    
-    String LATEST = "Latest";
-    String FIXLATEST = "FIX." + LATEST;
+	/*
+	 * FIX 5.0+ does not have a begin string.
+	 */
+	String FIX50 = "FIX.5.0";
+	String FIX50SP1 = "FIX.5.0SP1";
+	String FIX50SP2 = "FIX.5.0SP2";
 
-    // FIXT.x.x support
+	String LATEST = "Latest";
+	String FIXLATEST = "FIX." + LATEST;
 
-    String FIXT_SESSION_PREFIX = "FIXT.";
-    String BEGINSTRING_FIXT11 = FIXT_SESSION_PREFIX + "1.1";
+	// FIXT.x.x support
+
+	String FIXT_SESSION_PREFIX = "FIXT.";
+	String BEGINSTRING_FIXT11 = FIXT_SESSION_PREFIX + "1.1";
+
+	String BEGINSTRING_HNX = "HNX.TDS.1";
 }
