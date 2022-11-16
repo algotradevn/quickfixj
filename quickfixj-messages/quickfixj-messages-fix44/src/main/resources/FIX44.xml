@@ -1375,7 +1375,7 @@
       <field name="MiscFeeBasis" required="N"/>
     </group>
     <field name="InternalOrderStatus" required="N"/>
-    <field name="ThirdPartySource" required="N"/>
+    <field name="ThirdPartyBroker" required="N"/>
     <field name="SecurityExchange" required="N"/>
     <field name="Price" required="N"/>
     <field name="OrdType" required="N"/>
