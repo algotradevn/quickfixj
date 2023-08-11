@@ -5632,6 +5632,7 @@
       <value enum="8" description="PRICE_EXCEEDS_CURRENT_PRICE_BAND"/>
       <value enum="18" description="INVALID_PRICE_INCREMENT"/>
       <value enum="99" description="OTHER"/>
+      <value enum="217" description="PAIR_ORDER_IS_PARTIALLY_FILLED"/>
     </field>
     <field number="103" name="OrdRejReason" type="INT">
       <value enum="0" description="BROKER_EXCHANGE_OPTION"/>

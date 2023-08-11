@@ -1379,6 +1379,7 @@
     <field name="SecurityExchange" required="N"/>
     <field name="Price" required="N"/>
     <field name="OrdType" required="N"/>
+    <field name="CustomOrderContent" required="N"/>
   </message>
   <message name="DontKnowTrade" msgtype="Q" msgcat="app">
     <field name="OrderID" required="Y"/>
@@ -4428,6 +4429,7 @@
       <value enum="5" description="ORIGORDMODTIME_DID_NOT_MATCH_LAST_TRANSACTTIME_OF_ORDER"/>
       <value enum="6" description="DUPLICATE_CLORDID_RECEIVED"/>
       <value enum="99" description="OTHER"/>
+      <value enum="217" description="PAIR_ORDER_IS_PARTIALLY_FILLED"/>
     </field>
     <field number="103" name="OrdRejReason" type="INT">
       <value enum="0" description="BROKER_EXCHANGE_OPTION"/>
