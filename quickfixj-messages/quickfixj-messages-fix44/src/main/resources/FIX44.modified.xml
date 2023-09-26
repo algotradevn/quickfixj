@@ -1364,6 +1364,7 @@
       <field name="LegLastPx" required="N"/>
     </group>
     <field name="CopyMsgIndicator" required="N"/>
+    <field name="Country" required="N"/>
     <group name="NoMiscFees" required="N">
       <field name="MiscFeeAmt" required="N"/>
       <field name="MiscFeeCurr" required="N"/>
