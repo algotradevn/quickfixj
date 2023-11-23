@@ -814,8 +814,21 @@
     <field name="ApplQueueResolution" required="N"/>
   </message>
   <message name="MarketDataIncrementalRefresh" msgtype="X" msgcat="app">
+ 	<field name="MarketID" required="Y"/>
+ 	<field name="BoardID" required="Y"/>
+ 	<field name="TradingSessionID" required="Y"/>
+ 	<component name="Instrument" required="N"/>
+ 	<field name="TradeDate" required="Y"/>
+ 	<field name="TransactTime" required="Y"/>
+ 	<field name="TotalVolumeTraded" required="N"/>
+ 	<field name="GrossTradeAmt" required="N"/>
+ 	<field name="SellTotOrderQty" required="N"/>
+ 	<field name="BuyTotOrderQty" required="N"/>
+ 	<field name="SellValidOrderCnt" required="N"/>
+ 	<field name="BuyValidOrderCnt" required="N"/>
     <field name="MDReqID" required="N"/>
     <group name="NoMDEntries" required="Y">
+      <field name="RptSeq" required="N"/>
       <field name="MDUpdateAction" required="Y"/>
       <field name="DeleteReason" required="N"/>
       <field name="MDEntryType" required="N"/>
@@ -6814,9 +6827,22 @@
     <field number="955" name="LegContractSettlMonth" type="MONTHYEAR"/>
     <field number="956" name="LegInterestAccrualDate" type="LOCALMKTDATE"/>
     
+    <!-- BEGIN For Internal Broker -->
     <field number="6000" name="CustomOrderTypeField" type="STRING"/>
     <field number="6001" name="InternalOrderStatus" type="CHAR"/>
     <field number="6002" name="ThirdPartyBroker" type="STRING"/>
     <field number="6003" name="CustomOrderContent" type="STRING"/>
+    <!-- END For Internal Broker -->
+    
+    <!-- BEGIN For KRX -->
+    <field number="20004" name="BoardID" type="STRING"/>
+    
+    <field number="30001" name="MarketID" type="STRING"/>
+    
+    <field number="30521" name="SellTotOrderQty" type="INT"/>
+    <field number="30522" name="BuyTotOrderQty" type="INT"/>
+    <field number="30523" name="SellValidOrderCnt" type="INT"/>
+    <field number="30524" name="BuyValidOrderCnt" type="INT"/>
+    <!-- END For KRX -->
   </fields>
 </fix>
