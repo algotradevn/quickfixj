@@ -15,5 +15,4 @@ public class SellValidOrderCnt extends IntField {
 	public SellValidOrderCnt(final Integer data) {
 		super(FIELD, data);
 	}
-
 }
