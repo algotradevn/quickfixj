@@ -1027,10 +1027,11 @@ public class Session implements Closeable {
 		final String sessionBeginString = sessionID.getBeginString();
 		try {
 			final String beginString = header.getString(BeginString.FIELD);
-			if (!beginString.equals(sessionBeginString)) {
-				throw new UnsupportedVersion("Message version '" + beginString
-						+ "' does not match the session version '" + sessionBeginString + "'");
-			}
+			// if (!beginString.equals(sessionBeginString)) {
+			// throw new UnsupportedVersion("Message version '" + beginString
+			// + "' does not match the session version '" + sessionBeginString +
+			// "'");
+			// }
 
 			if (MsgType.LOGON.equals(msgType)) {
 				if (sessionID.isFIXT()) {
