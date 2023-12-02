@@ -25,6 +25,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.quickfixj.CharsetSupport;
 
@@ -38,11 +40,13 @@ import quickfix.field.converter.UtcTimestampConverter;
  */
 public class FileLog extends AbstractLog {
     private static final byte[] TIME_STAMP_DELIMITER;
+	private static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat(
+			"yyyyMMdd");
 
     static {
         try {
             TIME_STAMP_DELIMITER = ": ".getBytes(CharsetSupport.getCharset());
-        } catch (UnsupportedEncodingException e) {
+        } catch (final UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
     }
@@ -59,16 +63,17 @@ public class FileLog extends AbstractLog {
     private final boolean includeMillis;
     private final boolean includeTimestampForMessages;
 
-    FileLog(String path, SessionID sessionID, boolean includeMillis, boolean includeTimestampForMessages, boolean logHeartbeats) throws FileNotFoundException {
-        String sessionName = FileUtil.sessionIdFileName(sessionID);
+    FileLog(final String path, final SessionID sessionID, final boolean includeMillis, final boolean includeTimestampForMessages, final boolean logHeartbeats) throws FileNotFoundException {
+        final String sessionName = FileUtil.sessionIdFileName(sessionID);
 
         setLogHeartbeats(logHeartbeats);
+		final String curDate = DATE_FORMATTER.format(new Date());
 
-        String prefix = FileUtil.fileAppendPath(path, sessionName + ".");
+		final String prefix = FileUtil.fileAppendPath(path, curDate + "_" + sessionName + ".");
         messagesFileName = prefix + "messages.log";
         eventFileName = prefix + "event.log";
 
-        File directory = new File(messagesFileName).getParentFile();
+        final File directory = new File(messagesFileName).getParentFile();
         if (!directory.exists()) {
             directory.mkdirs();
         }
@@ -79,20 +84,22 @@ public class FileLog extends AbstractLog {
         openLogStreams(true);
     }
 
-    private void openLogStreams(boolean append) throws FileNotFoundException {
+    private void openLogStreams(final boolean append) throws FileNotFoundException {
         messages = new FileOutputStream(messagesFileName, append);
         events = new FileOutputStream(eventFileName, append);
     }
 
-    protected void logIncoming(String message) {
+    @Override
+	protected void logIncoming(final String message) {
         writeMessage(messages, messagesLock, message, false);
     }
 
-    protected void logOutgoing(String message) {
+    @Override
+	protected void logOutgoing(final String message) {
         writeMessage(messages, messagesLock, message, false);
     }
 
-    private void writeMessage(FileOutputStream stream, Object lock, String message, boolean forceTimestamp) {
+    private void writeMessage(final FileOutputStream stream, final Object lock, final String message, final boolean forceTimestamp) {
         try {
             synchronized(lock) {
                 if (forceTimestamp || includeTimestampForMessages) {
@@ -105,7 +112,7 @@ public class FileLog extends AbstractLog {
                     stream.getFD().sync();
                 }
             }
-        } catch (IOException e) {
+        } catch (final IOException e) {
             // QFJ-459: no point trying to log the error in the file if we had an IOException
             // we will end up with a java.lang.StackOverflowError
             System.err.println("error writing message to log : " + message);
@@ -113,16 +120,18 @@ public class FileLog extends AbstractLog {
         }
     }
 
-    public void onEvent(String message) {
+    @Override
+	public void onEvent(final String message) {
         writeMessage(events, eventsLock, message, true);
     }
 
-    public void onErrorEvent(String message) {
+    @Override
+	public void onErrorEvent(final String message) {
         writeMessage(events, eventsLock, message, true);
     }
 
-    private void writeTimeStamp(OutputStream out) throws IOException {
-        String formattedTime = UtcTimestampConverter.convert(SystemTime.getDate(), includeMillis);
+    private void writeTimeStamp(final OutputStream out) throws IOException {
+        final String formattedTime = UtcTimestampConverter.convert(SystemTime.getDate(), includeMillis);
         out.write(formattedTime.getBytes(CharsetSupport.getCharset()));
         out.write(TIME_STAMP_DELIMITER);
     }
@@ -135,7 +144,7 @@ public class FileLog extends AbstractLog {
         return messagesFileName;
     }
 
-    public void setSyncAfterWrite(boolean syncAfterWrite) {
+    public void setSyncAfterWrite(final boolean syncAfterWrite) {
         this.syncAfterWrite = syncAfterWrite;
     }
 
@@ -154,11 +163,12 @@ public class FileLog extends AbstractLog {
      * Deletes the log files. Do not perform any log operations while performing
      * this operation.
      */
-    public void clear() {
+    @Override
+	public void clear() {
         try {
             close();
             openLogStreams(false);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             System.err.println("Could not clear log: " + getClass().getName());
         }
     }
