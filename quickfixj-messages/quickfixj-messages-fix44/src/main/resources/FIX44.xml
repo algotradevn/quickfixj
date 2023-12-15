@@ -776,10 +776,15 @@
     <field name="CorporateAction" required="N"/>
     <field name="NetChgPrevDay" required="N"/>
     <group name="NoMDEntries" required="Y">
+      <field name="RptSeq" required="N"/>
+      <field name="MDUpdateAction" required="N"/>
       <field name="MDEntryType" required="Y"/>
+      <field name="MDEntryPositionNo" required="N"/>
       <field name="MDEntryPx" required="N"/>
-      <field name="Currency" required="N"/>
       <field name="MDEntrySize" required="N"/>
+      <field name="NumberOfOrders" required="N"/>
+      <field name="MDEntryMMSize" required="N"/>
+      <field name="Currency" required="N"/>
       <field name="MDEntryDate" required="N"/>
       <field name="MDEntryTime" required="N"/>
       <field name="TickDirection" required="N"/>
@@ -802,8 +807,6 @@
       <field name="QuoteEntryID" required="N"/>
       <field name="MDEntryBuyer" required="N"/>
       <field name="MDEntrySeller" required="N"/>
-      <field name="NumberOfOrders" required="N"/>
-      <field name="MDEntryPositionNo" required="N"/>
       <field name="Scope" required="N"/>
       <field name="PriceDelta" required="N"/>
       <field name="Text" required="N"/>
@@ -6835,6 +6838,7 @@
     <field number="30522" name="BuyTotOrderQty" type="INT"/>
     <field number="30523" name="SellValidOrderCnt" type="INT"/>
     <field number="30524" name="BuyValidOrderCnt" type="INT"/>
+    <field number="30271" name="MDEntryMMSize" type="INT"/>
     <!-- END For KRX -->
   </fields>
 </fix>
