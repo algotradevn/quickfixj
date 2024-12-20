@@ -1514,6 +1514,7 @@
     <field name="Text" required="N"/>
     <field name="EncodedTextLen" required="N"/>
     <field name="EncodedText" required="N"/>
+    <field name="ThirdPartyBroker" required="N"/>
   </message>
   <message name="OrderCancelReject" msgtype="9" msgcat="app">
     <field name="OrderID" required="Y"/>
