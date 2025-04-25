@@ -199,6 +199,7 @@
       <field name="URLLink" required="N"/>
       <field name="RawDataLength" required="N"/>
       <field name="RawData" required="N"/>
+      <field name="ThirdPartyBroker" required="N"/>
     </message>
     <message name="Email" msgtype="C" msgcat="app">
       <field name="EmailThreadID" required="Y"/>
